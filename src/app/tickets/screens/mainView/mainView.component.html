@@ -1,0 +1,43 @@
+<div class="flex flex-col items-center justify-center h-full">
+  <h1 class="text-4xl sm:text-5xl font-bold text-blue-800 mb-6 text-center">
+    Bienvenido a <span class="text-blue-600">TWT OsTicket</span>
+  </h1>
+  <div class="flex flex-col sm:flex-row gap-6 w-full max-w-2xl">
+    <nz-card
+      class="flex-1 cursor-pointer hover:shadow-xl transition-shadow"
+      [nzHoverable]="true"
+      (click)="goTo('/tickets/new')"
+    >
+      <nz-card-meta
+        nzTitle="Crear Ticket"
+        nzDescription="Abre un nuevo ticket para soporte o atención."
+      ></nz-card-meta>
+      <div class="flex justify-center mt-4">
+        <i
+          nz-icon
+          nzType="plus-circle"
+          nzTheme="twoTone"
+          class="text-4xl text-blue-600"
+        ></i>
+      </div>
+    </nz-card>
+    <nz-card
+      class="flex-1 cursor-pointer hover:shadow-xl transition-shadow"
+      [nzHoverable]="true"
+      (click)="goTo('/tickets/list')"
+    >
+      <nz-card-meta
+        nzTitle="Listado de Tickets"
+        nzDescription="Consulta y da seguimiento a tus tickets existentes."
+      ></nz-card-meta>
+      <div class="flex justify-center mt-4">
+        <i
+          nz-icon
+          nzType="unordered-list"
+          nzTheme="twoTone"
+          class="text-4xl text-green-600"
+        ></i>
+      </div>
+    </nz-card>
+  </div>
+</div>
