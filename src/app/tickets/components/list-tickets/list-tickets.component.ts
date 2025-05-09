@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTableModule } from 'ng-zorro-antd/table';
 
@@ -55,4 +56,13 @@ export class ListTicketsComponent {
       subject: "prueba envio de correo",
     },
   ]
+
+  constructor(private _router: Router) {}
+
+  goToDetails(event: Event, item: any): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this._router.navigate(['/tickets', 'details', item.ticket_number])
+  }
 }

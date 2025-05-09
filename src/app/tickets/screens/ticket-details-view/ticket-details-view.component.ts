@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzDescriptionsModule, NzDescriptionsSize } from 'ng-zorro-antd/descriptions'
 
@@ -11,6 +12,12 @@ import { NzDescriptionsModule, NzDescriptionsSize } from 'ng-zorro-antd/descript
   templateUrl: './ticket-details-view.component.html',
   styleUrl: './ticket-details-view.component.css'
 })
-export class TicketDetailsViewComponent {
+export class TicketDetailsViewComponent implements OnInit {
+  number!: string;
 
+  constructor(private _route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+      this.number = this._route.snapshot.paramMap.get('number')!;
+  }
 }

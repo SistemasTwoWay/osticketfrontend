@@ -26,6 +26,13 @@ export const TICKET_ROUTES: Routes = [
             (c) => c.ListTicketsViewComponent
           ),
       },
+      {
+        path: 'details/:number',
+        loadComponent: () =>
+          import('./screens/ticket-details-view/ticket-details-view.component').then(
+            (c) => c.TicketDetailsViewComponent
+          ),
+      }
     ],
   },
 ];

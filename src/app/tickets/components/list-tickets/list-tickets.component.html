@@ -8,7 +8,7 @@
     </thead>
     <tbody>
         @for (ticket of ticketsList; track ticket) {
-        <tr>
+        <tr (click)="goToDetails($event, ticket)">
             <td>{{ ticket.ticket_number }}</td>
             <td>{{ ticket.status_name }}</td>
             <td>{{ ticket.subject }}</td>
