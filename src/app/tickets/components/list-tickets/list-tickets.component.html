@@ -1,0 +1,18 @@
+<nz-table #basicTable [nzData]="ticketsList">
+    <thead>
+        <tr>
+            <th>Número</th>
+            <th>Descripción</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (ticket of ticketsList; track ticket) {
+        <tr>
+            <td>{{ ticket.ticket_number }}</td>
+            <td>{{ ticket.status_name }}</td>
+            <td>{{ ticket.subject }}</td>
+        </tr>
+        }
+    </tbody>
+</nz-table>
