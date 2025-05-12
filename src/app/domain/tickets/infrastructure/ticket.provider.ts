@@ -1,8 +1,11 @@
-import { InjectionToken, Provider } from "@angular/core";
-import { TicketApiService } from "./ticket-api.service";
-export const HTTP_TICKET_SERVICE = new InjectionToken('TicketApiService');
+import { InjectionToken, Provider } from '@angular/core';
+import { TicketApiService } from './ticket-api.service';
+
+export const HTTP_TICKET_SERVICE = new InjectionToken<TicketApiService>(
+  'TicketApiService'
+);
 
 export const TICKET_API_PROVIDER: Provider = {
-    provide: HTTP_TICKET_SERVICE,
-    useClass: TicketApiService,
+  provide: HTTP_TICKET_SERVICE,
+  useClass: TicketApiService,
 };

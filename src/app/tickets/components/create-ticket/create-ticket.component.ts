@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -19,7 +19,10 @@ import { PrioritiesUseCaseService } from '../../../domain/priorities/application
 import { StatusUseCaseService } from '../../../domain/status/application/status-use-case.service';
 import { DepartmentUseCaseService } from '../../../domain/departments/application/department-use-case.service';
 import { CommonModule } from '@angular/common';
-
+import { NotifyService } from '../../../shared/services/notify.service';
+import { NzNotificationContentType } from 'ng-zorro-antd/notification';
+import { TicketCreate } from '../../../domain/tickets/domain/ticket-create.model';
+import { TicketUseCaseService } from '../../../domain/tickets/application/ticket-use-case.service';
 @Component({
   selector: 'app-create-ticket',
   imports: [
@@ -33,7 +36,6 @@ import { CommonModule } from '@angular/common';
   ],
   templateUrl: './create-ticket.component.html',
   styleUrl: './create-ticket.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateTicketComponent implements OnInit {
   public formTicket = new FormGroup({
@@ -58,8 +60,10 @@ export class CreateTicketComponent implements OnInit {
 
   constructor(
     private _departmentsUseCaseService: DepartmentUseCaseService,
+    private _notifyService: NotifyService,
     private _prioritiesUseCaseService: PrioritiesUseCaseService,
     private _statusUseCaseService: StatusUseCaseService,
+    private _ticketUseCaseService: TicketUseCaseService,
     private _topicsUseCaseService: TopicsUseCaseService
   ) {}
 
@@ -77,6 +81,13 @@ export class CreateTicketComponent implements OnInit {
     this.getAllStatus();
   }
 
+  private showNotif(
+    type: 'success' | 'info' | 'warning' | 'error' | 'blank',
+    content: string
+  ) {
+    this._notifyService.showNotification(type, 'Notification', content);
+  }
+
   private getAllTopics() {
     this._topicsUseCaseService
       .getAllTopics({
@@ -87,6 +98,14 @@ export class CreateTicketComponent implements OnInit {
         next: (response) => {
           const { topics } = response.data;
           this.topicsList = topics;
+        },
+        error: (err) => {
+          this.showNotif(
+            'error',
+            err?.error.message ||
+              err?.message ||
+              'Algo salió mal cuando se intentó cargar los temas'
+          );
         },
       });
   }
@@ -103,6 +122,14 @@ export class CreateTicketComponent implements OnInit {
           const { departments } = response.data;
           this.departmentsList = departments;
         },
+        error: (err) => {
+          this.showNotif(
+            'error',
+            err?.error.message ||
+              err?.message ||
+              'Algo salió mal cuando se intentó cargar los departamentos'
+          );
+        },
       });
   }
 
@@ -116,6 +143,14 @@ export class CreateTicketComponent implements OnInit {
         next: (response) => {
           const { ticket_priority } = response.data;
           this.prioritiesList = ticket_priority;
+        },
+        error: (err) => {
+          this.showNotif(
+            'error',
+            err?.error.message ||
+              err?.message ||
+              'Algo salió mal cuando se intentó cargar las prioridades'
+          );
         },
       });
   }
@@ -131,6 +166,14 @@ export class CreateTicketComponent implements OnInit {
           const { ticket_status } = response.data;
           this.statusList = ticket_status;
         },
+        error: (err) => {
+          this.showNotif(
+            'error',
+            err?.error.message ||
+              err?.message ||
+              'Algo salió mal cuando se intentó cargar los estados'
+          );
+        },
       });
   }
 
@@ -140,10 +183,57 @@ export class CreateTicketComponent implements OnInit {
 
     if (this.formTicket.invalid) {
       this.formTicket.markAllAsTouched();
+      this.showNotif(
+        'error',
+        'Por favor, completa todos los campos obligatorios'
+      );
       return;
     }
 
-    const formValue = this.formTicket.value;
-    console.log('Form Value:', formValue);
+    const data = this.mapFormValuesToTicket();
+    this.createTicket(data);
+  }
+
+  private createTicket(parameters: TicketCreate): void {
+    this._ticketUseCaseService
+      .createTicket({
+        condition: 'add',
+        parameters,
+        query: 'ticket',
+      })
+      .subscribe({
+        next: (response) => {
+          const { ticket_id } = response.data;
+          this.showNotif(
+            'success',
+            `El ticket fue creado correctamente con el ID ${ticket_id}`
+          );
+          this.formTicket.reset();
+        },
+        error: (err) => {
+          this.showNotif(
+            'error',
+            err?.error.message ||
+              err?.message ||
+              'Algo salió mal cuando se intentó crear el ticket'
+          );
+        },
+      });
+  }
+
+  private mapFormValuesToTicket(): TicketCreate {
+    return {
+      dept_id: Number(this.formTicket.get('department')?.value!),
+      full_name_user: this.formTicket.get('fullNameUser')?.value!,
+      priority_id: Number(this.formTicket.get('priority')?.value!),
+      sla_id: 1, //TODO: revisar bien para que es el SLA
+      status_id: 1, //TODO: añadir catalogo de estados
+      subject: this.formTicket.get('subject')?.value!,
+      title: this.formTicket.get('title')?.value!,
+      topic_id: Number(this.formTicket.get('topic')?.value!),
+      user_email: this.formTicket.get('emailUser')?.value!,
+      user_notes: 'test', //TODO: revisar para que sirve el user_notes
+      user_phone: this.formTicket.get('phoneUser')?.value!,
+    };
   }
 }
