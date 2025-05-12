@@ -117,7 +117,7 @@
 </form>
 <div class="flex flex-row justify-end items-center gap-2 w-full">
   <button nz-button nzType="primary" nzShape="round" nzDanger>Cancelar</button>
-  <button nz-button nzType="primary" nzShape="round">
+  <button nz-button nzType="primary" nzShape="round" (click)="onSubmit($event)">
     <nz-icon nzType="plus" />
     Crear Ticket
   </button>

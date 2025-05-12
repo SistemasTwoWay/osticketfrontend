@@ -133,4 +133,17 @@ export class CreateTicketComponent implements OnInit {
         },
       });
   }
+
+  public onSubmit(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (this.formTicket.invalid) {
+      this.formTicket.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.formTicket.value;
+    console.log('Form Value:', formValue);
+  }
 }

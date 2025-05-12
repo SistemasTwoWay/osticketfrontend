@@ -2,64 +2,68 @@ import { inject, Injectable } from '@angular/core';
 import { ITicketApiService } from './ticket-api.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { TicketResumeApi } from './models/ticket-resume-api.model';
-import { TicketResume } from '../domain/ticket-resume.model';
+import { TicketLiteRoot } from '../domain/ticket-resume.model';
 import { map, Observable } from 'rxjs';
 import { RequestApi } from '../../../shared/interfaces/request-api.interface';
 import { ResponseApi } from '../../../shared/interfaces/response-api.interface';
+import {
+  TicketCreate,
+  TicketCreateResponse,
+} from '../domain/ticket-create.model';
+import { TicketReply } from '../domain/ticket-reply.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TicketApiService implements ITicketApiService {
-  private _http = inject(HttpClient);
-  private readonly BASE_URL = environment.apiUrl;
-  private readonly API_KEY = environment.apiKey;
+  private readonly _apiUrl = environment.apiUrl;
+  private readonly _http = inject(HttpClient);
 
-  private _setMapTicketResume(ticket: TicketResumeApi): TicketResume {
-    return {
-      userId: ticket.userId,
-      address: ticket.address,
-      ticketId: ticket.ticket_id,
-      ticketNumber: ticket.ticket_number,
-      statusName: ticket.status_name,
-      subject: ticket.subject,
-    };
-  }
-
-  private _SetMapTicketsResume(tickets: TicketResumeApi[]): TicketResume[] {
-    return tickets.map((ticket) => {
-      return {
-        userId: ticket.userId,
-        address: ticket.address,
-        ticketId: ticket.ticket_id,
-        ticketNumber: ticket.ticket_number,
-        statusName: ticket.status_name,
-        subject: ticket.subject,
-      };
-    });
-  }
-
-  getTicketsByEmail(email: string): Observable<TicketResume[]> {
-    const url = this.BASE_URL;
-    const headers = new HttpHeaders({
-      'apikey': this.API_KEY,
-      'Content-Type': 'application/json'
-    });
-
-    const bodyTicket: RequestApi =  {
-      query:"ticket",
-      condition: "getByEmail",
+  getTicketsByEmail(
+    email: string
+  ): Observable<ResponseApi<TicketLiteRoot> | null> {
+    const bodyTicket: RequestApi = {
+      query: 'ticket',
+      condition: 'getByEmail',
       parameters: {
-        address: email
+        address: email,
       },
-    }
+    };
 
-    return this._http.post<ResponseApi>(url, bodyTicket, { headers }).pipe(
-      map((response) => {
-        if (response.status != 'Success') return [];
-        return this._SetMapTicketsResume(response.data.tickets as TicketResumeApi[]);
-      })
-    )
+    const url = this._apiUrl;
+    const headers = new HttpHeaders();
+
+    return this._http
+      .post<ResponseApi<TicketLiteRoot>>(url, bodyTicket, { headers })
+      .pipe(
+        map((response) => {
+          if (response.status != 'Success') return null;
+          return response;
+        })
+      );
+  }
+
+  createTicket(
+    request: RequestApi<TicketCreate>
+  ): Observable<ResponseApi<TicketCreateResponse>> {
+    const url = this._apiUrl;
+    const headers = new HttpHeaders();
+    return this._http.post<ResponseApi<TicketCreateResponse>>(url, request, {
+      headers,
+    });
+  }
+
+  replyTicket(
+    request: RequestApi<TicketReply>
+  ): Observable<ResponseApi<{ status: string; message: string }>> {
+    const url = this._apiUrl;
+    const headers = new HttpHeaders();
+    return this._http.post<ResponseApi<{ status: string; message: string }>>(
+      url,
+      request,
+      {
+        headers,
+      }
+    );
   }
 }

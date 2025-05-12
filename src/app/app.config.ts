@@ -13,7 +13,7 @@ import es from '@angular/common/locales/es';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { TICKET_API_PROVIDER } from './domain/tickets/infrastructure/providers/ticket.provider';
+import { TICKET_API_PROVIDER } from './domain/tickets/infrastructure/ticket.provider';
 import { headersInterceptor } from './shared/interceptors/headers.interceptor';
 import { DEPARTMENT_PROVIDER } from './domain/departments/infrastructure/department.provider';
 import { PRIORITY_PROVIDER } from './domain/priorities/infrastructure/priority.provider';
