@@ -28,7 +28,7 @@ export class ListTicketsComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
 
-    this._router.navigate(['/tickets', 'details', item.ticketNumber]);
+    this._router.navigate(['/tickets', 'details', item.ticket_number]);
   }
 
   getTicketsByEmail(email: string) {
