@@ -1,18 +1,18 @@
 <nz-table #basicTable [nzData]="ticketsList">
-    <thead>
-        <tr>
-            <th>Número</th>
-            <th>Descripción</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (ticket of ticketsList; track ticket) {
-        <tr (click)="goToDetails($event, ticket)">
-            <td>{{ ticket.ticketNumber }}</td>
-            <td>{{ ticket.statusName }}</td>
-            <td>{{ ticket.subject }}</td>
-        </tr>
-        }
-    </tbody>
+  <thead>
+    <tr>
+      <th>Número</th>
+      <th>Descripción</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (ticket of ticketsList; track ticket) {
+    <tr (click)="goToDetails($event, ticket)">
+      <td>{{ ticket.ticket_number }}</td>
+      <td>{{ ticket.status_name }}</td>
+      <td>{{ ticket.subject }}</td>
+    </tr>
+    }
+  </tbody>
 </nz-table>
