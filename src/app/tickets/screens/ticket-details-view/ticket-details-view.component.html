@@ -1,3 +1,5 @@
 <div class="container mx-auto px-4 py-8">
-    <app-ticket-data-description/>
+    @if(ticket) {
+        <app-ticket-data-description [ticketData]="ticket"/>
+    }
 </div>

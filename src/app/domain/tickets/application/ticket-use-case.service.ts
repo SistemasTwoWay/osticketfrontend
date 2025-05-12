@@ -17,6 +17,10 @@ export class TicketUseCaseService {
     return this._ticketApiService.getTicketsByEmail(email);
   }
 
+  getTicketDetailsByNumber(number: string) {
+    return this._ticketApiService.getTicketDetailsByNumber(number);
+  }
+
   createTicket(request: RequestApi<TicketCreate>) {
     return this._ticketApiService.createTicket(request);
   }

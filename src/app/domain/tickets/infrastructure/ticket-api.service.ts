@@ -11,6 +11,7 @@ import {
   TicketCreateResponse,
 } from '../domain/ticket-create.model';
 import { TicketReply } from '../domain/ticket-reply.model';
+import { TicketDataRoot } from '../domain/ticket-data.model';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +36,30 @@ export class TicketApiService implements ITicketApiService {
 
     return this._http
       .post<ResponseApi<TicketLiteRoot>>(url, bodyTicket, { headers })
+      .pipe(
+        map((response) => {
+          if (response.status != 'Success') return null;
+          return response;
+        })
+      );
+  }
+
+  getTicketDetailsByNumber(
+    number: string
+  ): Observable<ResponseApi<TicketDataRoot> | null> {
+    const bodyTicket: RequestApi = {
+      query: 'ticket',
+      condition: 'getDetailedByNumber',
+      parameters: {
+        number: number,
+      },
+    };
+
+    const url = this._apiUrl;
+    const headers = new HttpHeaders();
+
+    return this._http
+      .post<ResponseApi<TicketDataRoot>>(url, bodyTicket, { headers })
       .pipe(
         map((response) => {
           if (response.status != 'Success') return null;

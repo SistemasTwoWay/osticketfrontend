@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzDescriptionsModule, NzDescriptionsSize } from 'ng-zorro-antd/descriptions'
-import { TicketResume } from '../../../domain/tickets/domain/ticket-resume.model';
-import { CommonModule } from '@angular/common';
-import { getPriorityClass, getStatusClass } from '../../../shared/helpers/color-tickets';
 import { TicketDataDescriptionComponent } from '../../components/ticket-data-description/ticket-data-description.component';
+import { TicketData } from '../../../domain/tickets/domain/ticket-data.model';
+import { TicketUseCaseService } from '../../../domain/tickets/application/ticket-use-case.service';
 
 @Component({
   selector: 'app-ticket-details-view',
@@ -17,11 +14,28 @@ import { TicketDataDescriptionComponent } from '../../components/ticket-data-des
 })
 export class TicketDetailsViewComponent implements OnInit {
   number!: string;
-  ticket!: TicketResume;
+  ticket!: TicketData;
 
-  constructor(private _route: ActivatedRoute) {}
+  constructor(
+    private _route: ActivatedRoute,
+    private _ticketUseCaseService: TicketUseCaseService
+  ) {}
 
   ngOnInit(): void {
     this.number = this._route.snapshot.paramMap.get('number')!;
+    this.getTicketDetails(this.number);
+  }
+
+  getTicketDetails(number: string) {
+    this._ticketUseCaseService.getTicketDetailsByNumber(number).subscribe({
+      next: (response) => {
+        if (!response) return;
+
+        const {ticket} = response.data;
+
+        this.ticket = ticket;
+      },
+      error: () => {}
+    })
   }
 }

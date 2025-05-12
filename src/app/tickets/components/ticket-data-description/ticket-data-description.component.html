@@ -1,38 +1,38 @@
 <div class="grid auto-grid-rows gap-2">
     <nz-card [nzBordered]="true" [nzTitle]="'Detalles'" class="shadow-lg">
         <nz-descriptions>
-            <nz-descriptions-item nzTitle="Ticket">123456</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Usuario">user_name</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Correo">{{'correo@dominio.com'}}</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Departamento">Contabilidad</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Fecha de Creación">11-02-2025</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Ticket">{{ticketData.number}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Usuario">{{ticketData.name}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Correo">{{ticketData.address}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Departamento">{{ticketData.department}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Fecha de Creación">{{ticketData.created}}</nz-descriptions-item>
         </nz-descriptions>
     </nz-card>
 
     <nz-card [nzBordered]="true" [nzTitle]="'Actualizaciones'" class="shadow-lg">
         <nz-descriptions>
-            <nz-descriptions-item nzTitle="Asignado a">ccastro</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Tipo de Ayuda">Some Help</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Fecha de Vencimiento">11-02-2025</nz-descriptions-item>
-            <nz-descriptions-item nzTitle="Última Respuesta">11-02-2025</nz-descriptions-item>
+            <!-- <nz-descriptions-item nzTitle="Asignado a">{{ticketData.}}</nz-descriptions-item> -->
+            <nz-descriptions-item nzTitle="Tipo de Ayuda">{{ticketData.topic}}</nz-descriptions-item>
+            <!-- <nz-descriptions-item nzTitle="Fecha de Vencimiento">{{ticketData.d}}</nz-descriptions-item> -->
+            <nz-descriptions-item nzTitle="Última Respuesta">{{ticketData.lastresponse ?? ""}}</nz-descriptions-item>
         </nz-descriptions>
     </nz-card>
 
     <div class="grid grid-cols-2 gap-4 h-15">
-        <div [ngClass]="getStatus('Open')" class="p-4 mt-4 rounded-md">
+        <div [ngClass]="getStatus(ticketData.status)" class="p-4 mt-4 rounded-md">
             <p class="font-semibold">
                 Status: 
                 <span class="font-semibold">
-                    Open
+                    {{ticketData.status}}
                 </span>
             </p>
         </div>
 
-        <div [ngClass]="getPriority('High')" class="p-4 mt-4 rounded-md">
+        <div [ngClass]="getPriority(ticketData.priority)" class="p-4 mt-4 rounded-md">
             <p class="font-semibold">
                 Prioridad: 
                 <span class="font-semibold">
-                    Emergency
+                    {{ticketData.priority}}
                 </span>
             </p>
         </div>

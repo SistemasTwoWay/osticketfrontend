@@ -7,11 +7,15 @@ import {
 } from '../domain/ticket-create.model';
 import { RequestApi } from '../../../shared/interfaces/request-api.interface';
 import { TicketReply } from '../domain/ticket-reply.model';
+import { TicketDataRoot } from '../domain/ticket-data.model';
 
 export interface ITicketApiService {
   getTicketsByEmail(
     email: string
   ): Observable<ResponseApi<TicketLiteRoot> | null>;
+  getTicketDetailsByNumber(
+    number: string
+  ): Observable<ResponseApi<TicketDataRoot> | null>;
   createTicket(
     request: RequestApi<TicketCreate>
   ): Observable<ResponseApi<TicketCreateResponse>>;
