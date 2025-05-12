@@ -80,8 +80,8 @@ export class CreateTicketComponent implements OnInit {
   private getAllTopics() {
     this._topicsUseCaseService
       .getAllTopics({
-        query: 'topics',
         condition: 'all',
+        query: 'topics',
       })
       .subscribe({
         next: (response) => {
@@ -109,8 +109,8 @@ export class CreateTicketComponent implements OnInit {
   private getAllPriorities() {
     this._prioritiesUseCaseService
       .getAllPriorities({
-        query: 'ticketPriority',
         condition: 'all',
+        query: 'ticketPriority',
       })
       .subscribe({
         next: (response) => {
@@ -123,8 +123,8 @@ export class CreateTicketComponent implements OnInit {
   private getAllStatus() {
     this._statusUseCaseService
       .getAllStatus({
-        query: 'ticketStatus',
         condition: 'all',
+        query: 'ticketStatus',
       })
       .subscribe({
         next: (response) => {
