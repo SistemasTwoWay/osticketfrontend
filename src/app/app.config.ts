@@ -10,9 +10,19 @@ import es from '@angular/common/locales/es';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
+import { TICKET_API_PROVIDER } from './domain/tickets/infrastructure/providers/ticket.provider';
 
 registerLocaleData(es);
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideNzIcons(icons), provideNzI18n(es_ES), importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient()]
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }), 
+    provideRouter(routes), 
+    provideNzIcons(icons), 
+    provideNzI18n(es_ES), 
+    importProvidersFrom(FormsModule), 
+    provideAnimationsAsync(), 
+    provideHttpClient(),
+    TICKET_API_PROVIDER,
+  ]
 };
