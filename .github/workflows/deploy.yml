@@ -1,24 +1,33 @@
-name: Deploy a servidor
+name: Deploy Workflow
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout del repositorio
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Deploy vía SSH
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
-            cd /home/digitalocean/Projects/osticketfrontend 
+            # Navegar al directorio del proyecto
+            cd /home/digitalocean/Projects/osticketfrontend
+
+            # Actualizar el repositorio y construir el proyecto
             git pull origin main
+            npm install
             npm run build
+
+            # Usar rsync para mover el contenido de dist al directorio de destino
+            sudo rsync -a --delete /home/digitalocean/Projects/osticketfrontend/dist/ /var/www/osticket-frontend/
