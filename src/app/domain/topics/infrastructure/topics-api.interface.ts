@@ -5,4 +5,7 @@ import { RequestApi } from '../../../shared/interfaces/request-api.interface';
 
 export interface ITopicApiService {
   getAllTopics(request: RequestApi): Observable<ResponseApi<TopicRoot>>;
+  searchSpecificTopic(
+    request: RequestApi<{ id: number }>
+  ): Observable<ResponseApi<TopicRoot>>;
 }
