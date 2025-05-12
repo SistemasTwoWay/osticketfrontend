@@ -62,6 +62,7 @@ export class CreateTicketComponent implements OnInit {
     private _statusUseCaseService: StatusUseCaseService,
     private _topicsUseCaseService: TopicsUseCaseService
   ) {}
+
   ngOnInit(): void {
     this.syncData();
   }
