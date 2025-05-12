@@ -1,16 +1,17 @@
-name: Deploy a servidor
+name: Deploy vía SSH
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout del repositorio
-        uses: actions/checkout@v4
+      - name: Checkout del código
+        uses: actions/checkout@v3
 
       - name: Deploy vía SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -18,7 +19,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
-            cd /home/digitalocean/Projects/osticketfrontend 
+            cd /home/digitalocean/Projects/osticketfrontend
             git pull origin main
             npm run build
