@@ -13,11 +13,12 @@ import es from '@angular/common/locales/es';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { TICKET_API_PROVIDER } from './domain/tickets/infrastructure/providers/ticket.provider';
 import { headersInterceptor } from './shared/interceptors/headers.interceptor';
-import { TOPICS_PROVIDER } from './domain/topics/infrastructure/topics.provider';
 import { DEPARTMENT_PROVIDER } from './domain/departments/infrastructure/department.provider';
-import { STATUS_PROVIDER } from './domain/status/infrastructure/status.provider';
 import { PRIORITY_PROVIDER } from './domain/priorities/infrastructure/priority.provider';
+import { STATUS_PROVIDER } from './domain/status/infrastructure/status.provider';
+import { TOPICS_PROVIDER } from './domain/topics/infrastructure/topics.provider';
 
 registerLocaleData(es);
 
@@ -34,6 +35,7 @@ export const appConfig: ApplicationConfig = {
     DEPARTMENT_PROVIDER,
     PRIORITY_PROVIDER,
     STATUS_PROVIDER,
+    TICKET_API_PROVIDER,
     TOPICS_PROVIDER,
   ],
 };

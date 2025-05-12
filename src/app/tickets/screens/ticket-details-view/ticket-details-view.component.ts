@@ -18,6 +18,7 @@ export class TicketDetailsViewComponent implements OnInit {
   constructor(private _route: ActivatedRoute) {}
 
   ngOnInit(): void {
-      this.number = this._route.snapshot.paramMap.get('number')!;
+    this.number = this._route.snapshot.paramMap.get('number')!;
+    console.log(this.number);
   }
 }
