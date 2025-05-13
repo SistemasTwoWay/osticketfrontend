@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* NgZorro tiene mucho margin-bottom en las <p><p> */
 p {
   margin-bottom: 0 !important;
 }

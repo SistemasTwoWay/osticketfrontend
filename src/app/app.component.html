@@ -1,90 +1,101 @@
-<nz-layout class="app-layout">
-  <nz-sider
-    class="menu-sidebar"
-    nzCollapsible
-    nzWidth="256px"
-    nzBreakpoint="md"
-    [(nzCollapsed)]="isCollapsed"
-    [nzTrigger]="null"
-  >
-    <div class="flex items-center w-full transition-all duration-300">
-      <a
-        routerLink="/tickets"
-        class="flex flex-row items-center justify-center w-full"
-      >
-        <img
-          src="/twt.png"
-          alt="logo"
-          [ngClass]="isCollapsed ? 'h-14 w-26 mx-auto mt-2' : 'h-16 w-26'"
-          class="transition-all duration-300"
-        />
-        @if ( !isCollapsed ) {
-        <p
-          class="font-bold text-white text-xl ml-4 mb-0 transition-opacity duration-300"
+@if (sidebarOpen) {
+<div
+  class="fixed inset-0 z-40 bg-transparente transition-opacity duration-200"
+  (click)="sidebarOpen = false"
+></div>
+}
+<aside
+  class="fixed top-0 left-0 h-full w-64 bg-[#000b42] z-50 transform transition-transform duration-300 shadow-lg"
+  [class.-translate-x-full]="!sidebarOpen"
+  [class.translate-x-0]="sidebarOpen"
+  tabindex="-1"
+>
+  <a routerLink="/" class="flex items-center h-16 px-2 gap-2">
+    <img src="/twt.png" alt="logo" class="h-14 w-auto" />
+    <span class="text-white font-bold text-lg mr-2">TWT OsTicket</span>
+  </a>
+  <nav class="mt-6">
+    <ul class="space-y-2">
+      <li>
+        <a
+          routerLink="/"
+          class="flex items-center px-6 py-3 !text-white text-lg hover:bg-[#1c3de8] font-semibold rounded transition"
         >
-          OsTicket
-        </p>
-        }
-      </a>
-    </div>
-    <ul nz-menu nzTheme="dark" nzMode="inline">
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/tickets/new">
-          <nz-icon nzType="diff" nzTheme="fill" />
-          @if ( !isCollapsed ) {
-          <span class="ml-2 font-semibold text-lg">Crear Ticket</span>
-          }
+          <nz-icon nzType="home" nzTheme="fill" />
+          <span class="ml-3">Inicio</span>
         </a>
       </li>
-      <li nz-menu-item nzMatchRouter>
-        <a routerLink="/tickets/list">
-          <nz-icon nzType="database" nzTheme="fill" />
-          @if ( !isCollapsed ) {
-          <span class="ml-2 font-semibold text-lg">Listado de Tickets</span>
-          }
+      <li>
+        <a
+          routerLink="/tickets/new"
+          class="flex items-center px-6 py-3 !text-white text-lg hover:bg-[#1c3de8] font-semibold rounded transition"
+        >
+          <nz-icon nzType="diff" nzTheme="fill"></nz-icon>
+          <span class="ml-3">Crear Ticket</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/tickets/list"
+          class="flex items-center px-6 py-3 !text-white text-lg hover:bg-[#1c3de8] font-semibold rounded transition"
+        >
+          <nz-icon nzType="database" nzTheme="fill"></nz-icon>
+          <span class="ml-3">Listado de Tickets</span>
         </a>
       </li>
     </ul>
-  </nz-sider>
-  <nz-layout>
-    <nz-header>
-      <div class="app-header !bg-[#1c3de8]">
-        <span
-          class="header-trigger cursor-pointer hidden sm:flex"
-          (click)="isCollapsed = !isCollapsed"
-        >
-          <nz-icon
-            class="trigger"
-            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-          ></nz-icon>
+  </nav>
+</aside>
 
-          <p
-            class="font-bold text-white text-xl mb-0 transition-opacity duration-300 ml-2 relative bottom-1"
-          >
-            SOPORTE TWT
-          </p>
-        </span>
-      </div>
-    </nz-header>
-    <nz-content>
-      <div class="inner-content">
-        @if (isLoading$ | async) {
+<div class="min-h-screen flex flex-col bg-gray-100">
+  <header
+    class="h-16 flex items-center justify-between px-4 bg-[#1c3de8] z-10 relative"
+  >
+    <div class="flex flex-row items-center p-2 gap-2">
+      <button
+        class="text-white text-2xl"
+        (click)="sidebarOpen = true"
+        aria-label="Abrir menú"
+      >
+        <nz-icon nzType="menu-unfold" style="color: white" />
+      </button>
+      <a routerLink="/">
+        <img src="/twt.png" alt="logo" class="h-14 w-auto" />
+      </a>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="text-white font-bold text-xl hidden sm:flex"> Soporte</span>
+    </div>
+    <app-user-config class="px-2" />
+  </header>
+
+  <main class="flex-1 flex flex-col w-full">
+    <section class="flex-1 w-full p-2 sm:p-8 bg-white">
+      <div class="w-full">
+        @if(isLoading$ | async) {
         <app-spinner />
         }
         <router-outlet></router-outlet>
       </div>
-      <div class="flex flex-row items-center justify-center w-full">
-        <p class="font-semibold">
-          © {{ currentYear }}
-          <a href="https://twt.com.mx" target="_blank">Two Way Transfer</a>
-        </p>
-        <p class="mx-2 hidden md:flex">|</p>
-        <p class="font-semibold hidden md:flex">
-          Todos los derechos reservados
-        </p>
-        <p class="mx-2 hidden md:flex">|</p>
-        <p class="font-semibold hidden md:flex">Desarrollado por Sistemas</p>
-      </div>
-    </nz-content>
-  </nz-layout>
-</nz-layout>
+    </section>
+    <footer
+      class="flex flex-col sm:flex-row items-center justify-center w-full py-4 gap-2 text-center bg-white border-t"
+    >
+      <p class="font-semibold">
+        © {{ currentYear }}
+        <a
+          href="https://twt.com.mx"
+          target="_blank"
+          class="underline text-green-600"
+          >Two Way Transfer</a
+        >
+      </p>
+      <span class="hidden sm:inline px-2">|</span>
+      <p class="font-semibold hidden sm:inline">
+        Todos los derechos reservados
+      </p>
+      <span class="hidden sm:inline px-2">|</span>
+      <p class="font-semibold hidden sm:inline">Desarrollado por Sistemas</p>
+    </footer>
+  </main>
+</div>

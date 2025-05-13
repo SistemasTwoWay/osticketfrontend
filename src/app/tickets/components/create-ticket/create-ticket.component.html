@@ -7,7 +7,7 @@
 </div>
 <nz-divider class="!my-4 relative bottom-3" />
 <form nz-form [formGroup]="formTicket">
-  <nz-form-item class="w-1/2">
+  <nz-form-item class="w-full md:w-1/2">
     <nz-form-control nzErrorTip="El título es requerido">
       <nz-input-group nzPrefixIcon="snippets">
         <input
@@ -24,7 +24,7 @@
     nzOrientation="left"
     class="!my-2 relative bottom-3"
   />
-  <div class="flex flex-row items-center gap-2 w-full">
+  <div class="flex flex-col md:flex-row items-center gap-2 w-full">
     <nz-form-item class="w-full">
       <nz-form-control nzErrorTip="El nombre completo es requerido">
         <nz-input-group nzPrefixIcon="user">
@@ -50,7 +50,7 @@
       </nz-form-control>
     </nz-form-item>
   </div>
-  <div class="flex flex-row items-center gap-2 w-full">
+  <div class="flex flex-col md:flex-row items-center gap-2 w-full">
     <nz-form-item class="w-full">
       <nz-form-control nzErrorTip="El número de teléfono es requerido">
         <nz-input-group nzPrefixIcon="whats-app">
@@ -85,7 +85,7 @@
     nzOrientation="left"
     class="!my-2 relative bottom-3"
   />
-  <div class="flex flex-row items-center gap-2 w-full">
+  <div class="flex flex-col md:flex-row items-center gap-2 w-full">
     <nz-form-item class="w-full">
       <nz-select
         nzShowSearch
@@ -129,7 +129,7 @@
       </nz-select>
     </nz-form-item>
   </div>
-  <nz-form-item class="w-1/2">
+  <nz-form-item class="w-full md:w-1/2">
     <nz-form-control nzErrorTip="El asunto es requerido">
       <nz-input-group nzPrefixIcon="alert">
         <input

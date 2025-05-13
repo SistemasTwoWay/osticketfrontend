@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { CreateTicketComponent } from '../../components/create-ticket/create-ticket.component';
 
 @Component({
