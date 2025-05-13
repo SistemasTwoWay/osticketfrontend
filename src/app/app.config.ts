@@ -19,6 +19,7 @@ import { DEPARTMENT_PROVIDER } from './domain/departments/infrastructure/departm
 import { PRIORITY_PROVIDER } from './domain/priorities/infrastructure/priority.provider';
 import { STATUS_PROVIDER } from './domain/status/infrastructure/status.provider';
 import { TOPICS_PROVIDER } from './domain/topics/infrastructure/topics.provider';
+import { loaderInterceptor } from './shared/interceptors/loader.interceptor';
 
 registerLocaleData(es);
 
@@ -30,7 +31,9 @@ export const appConfig: ApplicationConfig = {
     provideNzI18n(es_ES),
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([headersInterceptor])),
+    provideHttpClient(
+      withInterceptors([headersInterceptor, loaderInterceptor])
+    ),
     // custom providers
     DEPARTMENT_PROVIDER,
     PRIORITY_PROVIDER,

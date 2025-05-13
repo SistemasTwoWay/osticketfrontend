@@ -20,32 +20,41 @@ import { StatusUseCaseService } from '../../../domain/status/application/status-
 import { DepartmentUseCaseService } from '../../../domain/departments/application/department-use-case.service';
 import { CommonModule } from '@angular/common';
 import { NotifyService } from '../../../shared/services/notify.service';
-import { NzNotificationContentType } from 'ng-zorro-antd/notification';
 import { TicketCreate } from '../../../domain/tickets/domain/ticket-create.model';
 import { TicketUseCaseService } from '../../../domain/tickets/application/ticket-use-case.service';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { QuillModule } from 'ngx-quill';
+import { NgxTurnstileModule } from 'ngx-turnstile';
+import { environment } from '../../../../environments/environment';
+
 @Component({
   selector: 'app-create-ticket',
   imports: [
     CommonModule,
+    NgxTurnstileModule,
     NzButtonModule,
     NzCheckboxModule,
+    NzDividerModule,
     NzFormModule,
     NzInputModule,
     NzSelectModule,
+    QuillModule,
     ReactiveFormsModule,
   ],
   templateUrl: './create-ticket.component.html',
   styleUrl: './create-ticket.component.css',
 })
 export class CreateTicketComponent implements OnInit {
+  public readonly siteKey = environment.siteKeyCloudflare;
+
   public formTicket = new FormGroup({
     title: new FormControl('', [Validators.required]),
     subject: new FormControl('', [Validators.required]),
+    body: new FormControl('', [Validators.required]),
     fullNameUser: new FormControl('', [Validators.required]),
     emailUser: new FormControl('', [Validators.required, Validators.email]),
     phoneUser: new FormControl('', [Validators.required]),
     department: new FormControl('', [Validators.required]),
-    notes: new FormControl(''),
     priority: new FormControl('', [Validators.required]),
     status: new FormControl(''),
     topic: new FormControl('', [Validators.required]),
@@ -56,7 +65,28 @@ export class CreateTicketComponent implements OnInit {
   public prioritiesList: Priority[] = [];
   public statusList: Status[] = [];
 
-  public options: string[] = [];
+  public modulesNgxQuill = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+      ['code-block'],
+
+      [{ header: 1 }, { header: 2 }], // custom button values
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+      [{ direction: 'rtl' }], // text direction
+
+      [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: ['center', 'right'] }],
+
+      ['clean'], // remove formatting button
+
+      ['link'], // link and image, video
+    ],
+  };
 
   constructor(
     private _departmentsUseCaseService: DepartmentUseCaseService,
@@ -67,20 +97,13 @@ export class CreateTicketComponent implements OnInit {
     private _topicsUseCaseService: TopicsUseCaseService
   ) {}
 
+  //#region lifecycle hooks
   ngOnInit(): void {
     this.syncData();
   }
+  //#endregion lifecycle hooks
 
-  public syncData(event?: Event): void {
-    event?.preventDefault();
-    event?.stopPropagation();
-
-    this.getAllTopics();
-    this.getAllDepartments();
-    this.getAllPriorities();
-    this.getAllStatus();
-  }
-
+  //#region private methods
   private showNotif(
     type: 'success' | 'info' | 'warning' | 'error' | 'blank',
     content: string
@@ -177,23 +200,6 @@ export class CreateTicketComponent implements OnInit {
       });
   }
 
-  public onSubmit(event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (this.formTicket.invalid) {
-      this.formTicket.markAllAsTouched();
-      this.showNotif(
-        'error',
-        'Por favor, completa todos los campos obligatorios'
-      );
-      return;
-    }
-
-    const data = this.mapFormValuesToTicket();
-    this.createTicket(data);
-  }
-
   private createTicket(parameters: TicketCreate): void {
     this._ticketUseCaseService
       .createTicket({
@@ -220,20 +226,54 @@ export class CreateTicketComponent implements OnInit {
         },
       });
   }
+  //#endregion private methods
 
+  //#region methods for controls
+  public syncData(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    this.getAllTopics();
+    this.getAllDepartments();
+    this.getAllPriorities();
+    this.getAllStatus();
+  }
+
+  public onSubmit(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (this.formTicket.invalid) {
+      this.formTicket.markAllAsTouched();
+      this.showNotif(
+        'error',
+        'Por favor, completa todos los campos obligatorios'
+      );
+      return;
+    }
+
+    const data = this.mapFormValuesToTicket();
+    this.createTicket(data);
+  }
+
+  //#endregion methods for controls
+
+  //#region mappers
   private mapFormValuesToTicket(): TicketCreate {
     return {
+      body: this.formTicket.get('body')?.value!,
       dept_id: Number(this.formTicket.get('department')?.value!),
       full_name_user: this.formTicket.get('fullNameUser')?.value!,
       priority_id: Number(this.formTicket.get('priority')?.value!),
       sla_id: 1, //TODO: revisar bien para que es el SLA
-      status_id: 1, //TODO: añadir catalogo de estados
+      status_id: Number(this.formTicket.get('status')?.value!),
       subject: this.formTicket.get('subject')?.value!,
       title: this.formTicket.get('title')?.value!,
       topic_id: Number(this.formTicket.get('topic')?.value!),
       user_email: this.formTicket.get('emailUser')?.value!,
-      user_notes: 'test', //TODO: revisar para que sirve el user_notes
+      user_notes: 'default',
       user_phone: this.formTicket.get('phoneUser')?.value!,
     };
   }
+  //#endregion mappers
 }

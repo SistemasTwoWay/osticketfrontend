@@ -1,32 +1,29 @@
-<h2 class="text-2xl font-bold text-gray-800 mb-1">Crear Ticket (test 2)</h2>
-
+<div class="flex flex-row items-center justify-between w-full">
+  <h2 class="text-2xl font-bold text-gray-800 mb-1">Nuevo Ticket</h2>
+  <button (click)="syncData($event)" nz-button nzShape="round" nzType="primary">
+    <nz-icon nzType="sync" />
+    Actualizar
+  </button>
+</div>
+<nz-divider class="!my-4 relative bottom-3" />
 <form nz-form [formGroup]="formTicket">
-  <div class="flex flex-row justify-between items-center gap-2 w-full">
-    <nz-form-item class="w-full">
-      <nz-form-control nzErrorTip="El título es requerido">
-        <nz-input-group nzPrefixIcon="snippets">
-          <input
-            type="text"
-            nz-input
-            formControlName="title"
-            placeholder="Título"
-          />
-        </nz-input-group>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item class="w-full">
-      <nz-form-control nzErrorTip="El asunto es requerido">
-        <nz-input-group nzPrefixIcon="alert">
-          <input
-            type="text"
-            nz-input
-            formControlName="subject"
-            placeholder="Asunto"
-          />
-        </nz-input-group>
-      </nz-form-control>
-    </nz-form-item>
-  </div>
+  <nz-form-item class="w-1/2">
+    <nz-form-control nzErrorTip="El título es requerido">
+      <nz-input-group nzPrefixIcon="snippets">
+        <input
+          type="text"
+          nz-input
+          formControlName="title"
+          placeholder="Añade un título"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-divider
+    nzText="Tus datos"
+    nzOrientation="left"
+    class="!my-2 relative bottom-3"
+  />
   <div class="flex flex-row items-center gap-2 w-full">
     <nz-form-item class="w-full">
       <nz-form-control nzErrorTip="El nombre completo es requerido">
@@ -70,7 +67,7 @@
       <nz-select
         nzShowSearch
         nzAllowClear
-        nzPlaceHolder="Elige un departamento"
+        nzPlaceHolder="Elige tu departamento"
         formControlName="department"
         class="w-full"
       >
@@ -83,6 +80,11 @@
       </nz-select>
     </nz-form-item>
   </div>
+  <nz-divider
+    nzText="Ticket"
+    nzOrientation="left"
+    class="!my-2 relative bottom-3"
+  />
   <div class="flex flex-row items-center gap-2 w-full">
     <nz-form-item class="w-full">
       <nz-select
@@ -113,8 +115,45 @@
         }
       </nz-select>
     </nz-form-item>
+    <nz-form-item class="w-full">
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Status del ticket"
+        formControlName="status"
+        class="w-full"
+      >
+        @for (status of statusList; track $index) {
+        <nz-option [nzLabel]="status.name" [nzValue]="status.id" />
+        }
+      </nz-select>
+    </nz-form-item>
   </div>
+  <nz-form-item class="w-1/2">
+    <nz-form-control nzErrorTip="El asunto es requerido">
+      <nz-input-group nzPrefixIcon="alert">
+        <input
+          type="text"
+          nz-input
+          formControlName="subject"
+          placeholder="Resumén del ticket (Asunto)"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+  <quill-editor
+    [modules]="modulesNgxQuill"
+    formControlName="body"
+    placeholder="Describe tu situación"
+  ></quill-editor>
 </form>
+<div class="w-full flex items-center justify-end my-2">
+  <ngx-turnstile
+    [siteKey]="siteKey"
+    theme="light"
+    [tabIndex]="0"
+  ></ngx-turnstile>
+</div>
 <div class="flex flex-row justify-end items-center gap-2 w-full">
   <button nz-button nzType="primary" nzShape="round" nzDanger>Cancelar</button>
   <button

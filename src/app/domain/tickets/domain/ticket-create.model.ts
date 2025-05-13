@@ -1,6 +1,7 @@
 export interface TicketCreate {
   title: string;
   subject: string;
+  body: string;
   full_name_user: string;
   user_email: string;
   user_phone: string;
