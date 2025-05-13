@@ -212,7 +212,7 @@ export class CreateTicketComponent implements OnInit {
           const { ticket_id } = response.data;
           this.showNotif(
             'success',
-            `El ticket fue creado correctamente con el ID ${ticket_id}`
+            `El ticket fue creado correctamente con el ID ${ticket_id} \n Tiempo de respuesta ${response.time} ms`
           );
           this.formTicket.reset();
         },
