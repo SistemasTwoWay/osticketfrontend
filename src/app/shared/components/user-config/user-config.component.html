@@ -1,41 +1,89 @@
 <button
-  (click)="showModal()"
+  (click)="showModal($event)"
   nz-button
   nzShape="circle"
-  nzType="default"
   nzSize="large"
+  nzType="default"
 >
   <nz-icon nzType="setting" />
 </button>
 <nz-modal
+  (nzOnCancel)="handleCancel()"
   [(nzVisible)]="isVisible"
-  [nzTitle]="modalTitle"
   [nzContent]="modalContent"
   [nzFooter]="modalFooter"
-  (nzOnCancel)="handleCancel()"
+  [nzTitle]="modalTitle"
 >
-  <ng-template #modalTitle>Custom Modal Title</ng-template>
-
+  <ng-template #modalTitle>Configuración de usuario</ng-template>
   <ng-template #modalContent>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
+    <form nz-form [formGroup]="formUserConfig">
+      <div class="flex flex-row items-center gap-2">
+        <nz-form-item class="w-full">
+          <nz-form-control nzErrorTip="El título es requerido">
+            <nz-input-group nzPrefixIcon="snippets">
+              <input
+                type="text"
+                nz-input
+                formControlName="fullName"
+                placeholder="Nombre"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="w-full">
+          <nz-form-control nzErrorTip="El email es requerido">
+            <nz-input-group nzPrefixIcon="mail">
+              <input
+                type="email"
+                nz-input
+                formControlName="email"
+                placeholder="Correo electrónico"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div class="flex flex-row items-center gap-2">
+        <nz-form-item class="w-full">
+          <nz-form-control>
+            <nz-input-group nzPrefixIcon="phone">
+              <input
+                type="text"
+                nz-input
+                formControlName="phone"
+                placeholder="Teléfono"
+              />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="w-full">
+          <nz-select
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Elige tu departamento"
+            formControlName="department"
+            class="w-full"
+          >
+            @for (department of departmentsList; track $index) {
+            <nz-option
+              [nzLabel]="department.name"
+              [nzValue]="department.department_id"
+            />
+            }
+          </nz-select>
+        </nz-form-item>
+      </div>
+    </form>
   </ng-template>
-
   <ng-template #modalFooter>
-    <span>Modal Footer:</span>
-    <button nz-button nzType="default" (click)="handleCancel()">
-      Custom Callback
-    </button>
     <button
+      (click)="onSubmit($event)"
+      [nzLoading]="isConfirmLoading"
       nz-button
       nzType="primary"
-      (click)="handleOk()"
-      [nzLoading]="isConfirmLoading"
     >
-      Custom Submit
+      <nz-icon nzType="save" />
+      Guardar configuración
     </button>
   </ng-template>
 </nz-modal>

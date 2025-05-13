@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
@@ -31,13 +31,49 @@ export class AppComponent {
 
   public currentYear: number = new Date().getFullYear();
   public isLoading$ = this._loaderService.isLoading$;
+  public userEmail: string = '';
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private route: ActivatedRoute) {
     this.isLoading$.subscribe({
       next: (isLoading) => {
         this.showLoading = isLoading;
-        this.cdr.detectChanges();
       },
     });
+
+    this.route.queryParams.subscribe((params) => {
+      const email = params['email'];
+      if (email) this.saveAndVerifyEmail(email);
+    });
+
+    this.verifyUserConfig();
+  }
+
+  private verifyUserConfig() {
+    //TODO: verificar que haya datos en el localStorage
+    const userConfig = localStorage.getItem('userConfig');
+    if (!userConfig) {
+      return;
+    }
+
+    const userConfigParsed = JSON.parse(userConfig);
+    if (userConfigParsed) {
+      this.userEmail = userConfigParsed.email;
+    }
+  }
+
+  private saveAndVerifyEmail(email: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) return;
+
+    const userConfig = {
+      email: email,
+      fullName: '',
+      phone: '',
+      department: '',
+    };
+    localStorage.setItem('userConfig', JSON.stringify(userConfig));
+
+    this.userEmail = email;
   }
 }
